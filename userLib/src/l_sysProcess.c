@@ -56,10 +56,10 @@ int sysProcess(void *pMsg)
     //case CMSG_MASTER:
     case CUART1_TOUT:
         /************************************
-         * receive: {"xxxx":voi,"PLY":xxx}
+         * receive:  {"xxx":led,"R":0,"G":250,"B":0}
          * ack:
-         *    {"voi":xxxx,"PLY":OK}
-         *    {"voi":xxxx,"PLY":err}
+         *    {"led":xxx,"DIS":OK}
+         *    {"led":xxx,"DIS":err}
          ************************************/
         memset(buf, 0, sizeof(buf));
         memset(KVarr, 0, sizeof(KVarr));
