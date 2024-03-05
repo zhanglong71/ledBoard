@@ -23,6 +23,8 @@ extern actionQueue_t g_promptQueue;
 
 extern u8 g_IT_uart1_tmr;
 
+extern LedDisp_t g_led_display;
+
 #if 0
 extern	u8	g_IT_flag;
 extern  int g_tmr_iVopBusy;

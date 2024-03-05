@@ -88,6 +88,16 @@ int actionQueueOut(actionQueue_t *q, action_t *action)
 }
 
 /*********************************************************************************/
+void led_breath(unsigned char __vpIdx)
+{
+	action_t action;
+
+    action.actionType = CLED_BREATH;
+    action.actionTime = TIMER_70MS;
+    action.actionPara = __vpIdx;
+    actionQueueIn(&g_promptQueue, &action);
+}
+
 void vp_stor(unsigned char __vpIdx)
 {
 	action_t action;
@@ -151,6 +161,9 @@ static void startAction(actionQueue_t *q, action_t * pAction)
 {
 	switch(pAction->actionType) 
     {
+    case CLED_BREATH:
+		q->flag = (1<<4);
+        break;
 	case CACT_DELAY:
 		q->flag = (1<<3);
 		break;
@@ -191,6 +204,8 @@ static void stopAction(actionQueue_t *q)
     } else if(q->flag & (1<<0)) {
         // GPIO_VOPPWR_off();   /** do nothing **/
         //Mreset_bit(q->flag, 0);
+    } else if(q->flag & (1<<4)) {
+        //Mreset_bit(q->flag, 4);
   	} else {
 	}
 }

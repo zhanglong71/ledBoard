@@ -183,4 +183,147 @@ void LED_display(u32 __color)
    IRQ_enable();
 }
 
+/*************************************************************************
+ * color value
+ *************************************************************************/
+u8 getColorDepth(void)
+{
+    u8 const led_depth_tab[] = {
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        15,
+        19,
+        24,
+        30,
+        37,
+        45,
+        54,
+        64,
+        75,
+        87,
+        100,
+        114,
+        129,
+        145,
+        162,
+        180,
+        199,
+        219,
+        240,      
+        250,
+        
+        240,
+        219,
+        199,
+        180,
+        162,
+        145,
+        129,
+        114,
+        100,
+        87,
+        75,
+        64,
+        54,
+        45,
+        37,
+        30,
+        24,
+        19,
+        15,
+        12,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+    };
+    u8 static color_depth_index = 0;
+    color_depth_index++;
+    if (color_depth_index >= MTABSIZE(led_depth_tab)) {
+        color_depth_index = 0;
+    }
+    return led_depth_tab[color_depth_index];
+}
+/*************************************************************************/
+void ledRGBinit(void)
+{
+#if 1
+    g_led_display.color = 0;
+    g_led_display.tick = 0;
+
+    g_led_display.ptimer = &(g_timer[3]);
+    //g_led_display.sm_status = CLEDDISP_NONE;
+    g_led_display.stepMsgType = CLED_STEP;
+    g_led_display.overMsgType = CLED_OVER;
+
+    ClrTimer_irq(g_led_display.ptimer);
+#endif
+}
+
+void ledRGBProcess(void)
+{
+    u8 depth = 0;
+    u32 color = 0;
+
+    ClrTimer_irq(g_led_display.ptimer);
+    depth = getColorDepth();
+    if(g_led_display.color & 0x00ff0000) {
+        color |= (depth << 16);
+    }
+    if(g_led_display.color & 0x0000ff00) {
+        color |= (depth << 8);
+    }
+    if(g_led_display.color & 0x000000ff) {
+        color |= (depth);
+    }
+    
+    LED_display(color);
+    SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
+}
+
+void ledRGBbreath_start(u32 _color, u16 _tick)
+{
+    ClrTimer_irq(g_led_display.ptimer);
+    if (_tick < TIMER_70MS) {
+        g_led_display.tick = TIMER_70MS;
+    } else {
+        g_led_display.tick = _tick;   // set mask
+    }
+    
+    g_led_display.color = 0;   // set mask
+    if(_color & 0x00ff0000) {
+        g_led_display.color |= 0x00ff0000;
+    }
+    if(_color & 0x0000ff00) {
+        g_led_display.color |= 0x0000ff00;
+    }
+    if(_color & 0x000000ff) {
+        g_led_display.color |= 0x000000ff;
+    }
+
+    LED_display(g_led_display.color & 0x00010101);
+    SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
+}
+
+void ledRGBbreath_stop(void)
+{
+    g_led_display.color = 0;   // mask
+    g_led_display.tick = 0;
+    ClrTimer_irq(g_led_display.ptimer);
+}
 

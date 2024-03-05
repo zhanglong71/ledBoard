@@ -56,8 +56,11 @@ int sysProcess(void *pMsg)
     //case CMSG_MASTER:
     case CUART1_TOUT:
         /************************************
-         * receive:  {"xxx":led,"R":0,"G":250,"B":0}
+         * receive:  {"xxx":led,"R":0,"G":250,"B":0}  --- 只显示颜色
+         *   或      {"xxx":led,"R":0,"G":250,"B":0,"TIM":12}  --- 支持颜色渐变
+         *          
          * ack:
+         *
          *    {"led":xxx,"DIS":OK}
          *    {"led":xxx,"DIS":err}
          ************************************/
@@ -81,6 +84,7 @@ int sysProcess(void *pMsg)
             u8 red = 0;
             u8 green = 0;
             u8 blue = 0;
+            u8 tim = 0;
             u8 color_flag = 0;
             u8 src_idx = 0xff;
             for (u8 i = 0; ((i < MTABSIZE(KVarr)) && (KVarr[i].KVIndex > 0)); i++) {
@@ -100,12 +104,21 @@ int sysProcess(void *pMsg)
                      Mset_bit(color_flag, 4);
                      blue = atoi(KVarr[i].value);
                  }
+                 if (strstr(KVarr[i].key, "TIM")) {
+                     Mset_bit(color_flag, 5);
+                     tim = atoi(KVarr[i].value);
+                 }
             }
             if (Mget_bit(color_flag, 1) && Mget_bit(color_flag, 2) && Mget_bit(color_flag, 3) && Mget_bit(color_flag, 4)) {
                 if ((red <= 250) && (green <= 250) && (blue <= 250)) {
                     /** construct ack**/
                     u32 color = ((green << 16) | (red << 8) | blue);
-                    LED_display(color);
+                    if (tim == 0) {
+                        ledRGBbreath_stop();
+                        LED_display(color);
+                    } else  {
+                        ledRGBbreath_start(color, tim);
+                    }
                     generateLedDispAckOk(KVarr[src_idx].key);
                 } else {
                     generateLedDispAckErr(KVarr[src_idx].key);
@@ -227,7 +240,11 @@ int sysProcess(void *pMsg)
     case C485_OVER:    
         rs485actOver();
         break;
-                
+        
+    case CLED_STEP:
+        ledRGBProcess();
+        break;
+                          
     default:
         iRet = FALSE;
         break;	

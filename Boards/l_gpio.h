@@ -14,4 +14,10 @@ void GPIO_led1_blink(void);
 void GPIO_led2_blink(void);
 void LED_display(u32 __color);
 
+u8 getColorDepth(void);
+void ledRGBinit(void);
+void ledRGBProcess(void);
+void ledRGBbreath_start(u32 _color, u16 _tick);
+void ledRGBbreath_stop(void);
+
 #endif

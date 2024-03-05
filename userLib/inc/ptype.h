@@ -84,6 +84,9 @@ typedef enum {
 	
 	CPMT_TOUT,		/** 提示动作超时 **/
 	CPMT_OVER,		/** 提示动作完成 **/
+        
+    CLED_STEP,      /** LED display **/
+    CLED_OVER,      /** LED display **/
 
 } msgType_t;
 
@@ -160,6 +163,14 @@ typedef struct {
     msgType_t overMsgType;
 } rs485transX_t;
 
+typedef struct {
+    Timer_t* ptimer;
+    msgType_t stepMsgType;
+    msgType_t overMsgType;
+    u32 color;
+    u16 tick;
+} LedDisp_t;
+
 #if 1
 typedef struct action_s {
 	/*****************
@@ -191,6 +202,9 @@ typedef struct action_s {
   
 #define CVOP_PWRON	0xef
 #define CVOP_PWROFF 0xee
+
+#define CLED_BREATH 0xed
+
 
 
 #define CACT_MISC	0xeb

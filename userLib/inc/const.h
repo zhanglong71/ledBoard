@@ -21,7 +21,7 @@
 #define CSEND_BUF_NUM	8	//16	 //缓冲区个数
 #define CSEND_BUF_SIZE	16	//16	 //缓冲区大小
 
-#define TIMER_NUM	3       /** 定时器个数 **/
+#define TIMER_NUM	4       /** 定时器个数 **/
 #define TIMER_NUM_40US	1       /** 200us Timer **/
 /** 
  * 0 - 计时计数
@@ -37,6 +37,7 @@
 #define TIMER_10MS  (TIMER_UNIT)
 
 #define TIMER_50MS	(TIMER_10MS * 5)
+#define TIMER_70MS	(TIMER_10MS * 7)
 #define TIMER_100MS (TIMER_10MS * 10)
 
 #define TIMER_200MS (TIMER_10MS * 20)
@@ -78,5 +79,6 @@
 
 /*******************************************************************************/
 #define CINIT_COLOR (0x00ff00ff)  // the power on color(G0,R250,B250)
+
 /*******************************************************************************/
 #endif
