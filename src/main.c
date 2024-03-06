@@ -147,7 +147,7 @@ int main(void)
     while(1)
     {
         //deamon_uart1_send();
-        deamon_uart2_send();
+        //deamon_uart2_send();
         actionDoing(&g_promptQueue);
         rs485TransXDoing();
         

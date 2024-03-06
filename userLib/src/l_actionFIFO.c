@@ -273,7 +273,7 @@ void actionDoing(actionQueue_t * q)
  *************************************************/
 void actProcess(actionQueue_t * q)
 {
-    msg_t msg;
+    //msg_t msg;
 	action_t action;
 	
 	/** stop the timeout action first  **/

@@ -121,7 +121,7 @@ void UART1_IRQHandler(void)
         u8data.u8Val = UART_ReceiveData(UART1);
         u8FIFOin(&g_uart1RxQue, &u8data);
 
-        #if 1   // ???????????
+        #if 0   // ???????????
         msg_t msg;
         msg.msgType = CMSG_UART1RX;
         msgq_in(&g_msgq, &msg);
@@ -178,11 +178,11 @@ void UART2_IRQHandler(void)
         u8Data_t u8data;
         u8data.u8Val = UART_ReceiveData(UART2);
         u8FIFOin(&g_uart2RxQue, &u8data);
-    
+    #if 0
         msg_t msg;
         msg.msgType = CMSG_UART2RX;     /** message CMSG_UART3RX **/
         msgq_in(&g_msgq, &msg);
-
+    #endif
     #if 0  	
     /* receive data */
     Uart2Rx.Data[Uart2Rx.Index++] = UART_ReceiveData(UART2);

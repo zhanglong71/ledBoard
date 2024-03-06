@@ -57,18 +57,16 @@ typedef enum {
     CWIFI_TEST,
     
     CMSG_TMR,
-    CMSG_USTMR,
- //   CMSG_DLAY, 	/** 时钟 **/
- //   CMSG_NEXT, 	/** 进行入下一阶段 **/
-    CMSG_DKEY,
-    CMSG_UKEY,
+    //CMSG_USTMR,
+    //CMSG_DKEY,
+    //CMSG_UKEY,
     
     CUART1_TOUT,
-    CMSG_MASTER,
-    CMSG_UART1RX,
-    CMSG_UART1TX,
-    CMSG_UART2RX,
-    CMSG_UART2TX,
+    //CMSG_MASTER,
+    //CMSG_UART1RX,
+    //CMSG_UART1TX,
+    //CMSG_UART2RX,
+    //CMSG_UART2TX,
     //CMSG_UART3RX,
     //CMSG_UART3TX,
     
@@ -120,11 +118,12 @@ typedef struct {
     void *var2;
 }pair_t;
 
+#if 0
 typedef struct {
 	u8 smStatus_curr;
     u8 smStatus_next;
 } rs485pair_t;
-
+#endif
 
 
 #if 0

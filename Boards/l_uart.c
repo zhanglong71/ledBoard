@@ -49,6 +49,7 @@ void deamon_uart1_send(void)
 
 void deamon_uart2_send(void)
 {
+#if 0
     msg_t msg;
     u8Data_t u8Data;
     if (u8FIFOisEmpty(&g_uart2TxQue) == TRUE) {
@@ -68,6 +69,7 @@ void deamon_uart2_send(void)
         }
 		//		GPIO_led_blink(); //?????????????????????????
     }
+#endif
 }
 
 /**
