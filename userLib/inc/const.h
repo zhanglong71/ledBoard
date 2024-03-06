@@ -36,6 +36,8 @@
 #define TIMER_3UNIT 	(3)		/** 100Hz定时, 0等于关闭时钟 **/
 #define TIMER_10MS  (TIMER_UNIT)
 
+#define TIMER_20MS	(TIMER_10MS * 2)
+#define TIMER_30MS	(TIMER_10MS * 3)
 #define TIMER_50MS	(TIMER_10MS * 5)
 #define TIMER_70MS	(TIMER_10MS * 7)
 #define TIMER_100MS (TIMER_10MS * 10)

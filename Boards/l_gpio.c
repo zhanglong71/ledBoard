@@ -250,7 +250,47 @@ u8 getColorDepth(void)
         4,
         3,
         2,
-        1
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
     };
     u8 static color_depth_index = 0;
     color_depth_index++;
@@ -299,8 +339,8 @@ void ledRGBProcess(void)
 void ledRGBbreath_start(u32 _color, u16 _tick)
 {
     ClrTimer_irq(g_led_display.ptimer);
-    if (_tick < TIMER_70MS) {
-        g_led_display.tick = TIMER_70MS;
+    if (_tick < TIMER_30MS) {
+        g_led_display.tick = TIMER_30MS;
     } else {
         g_led_display.tick = _tick;   // set mask
     }

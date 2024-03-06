@@ -57,7 +57,7 @@ int sysProcess(void *pMsg)
     case CUART1_TOUT:
         /************************************
          * receive:  {"xxx":led,"R":0,"G":250,"B":0}  --- 只显示颜色
-         *   或      {"xxx":led,"R":0,"G":250,"B":0,"TIM":12}  --- 支持颜色渐变
+         *   或      {"xxx":led,"R":0,"G":250,"B":0,"TIM":12}  --- 支持颜色渐变】
          *          
          * ack:
          *
