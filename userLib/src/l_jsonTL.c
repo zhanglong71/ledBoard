@@ -3,6 +3,7 @@
 #include "ptype.h"
 #include "macro.h"
 #include "global.h"
+#include "version.h"
 
 #include "l_arch.h"
 #include <string.h>
@@ -16,29 +17,25 @@
 #include "l_rs485.h"
 // #include "main.h"
 /**********************************************************************************************/
-void reportVersion(void)
+RetStatus reportVersion(void)
 {
     u8 i = 0;
     u8Data_t u8Data;
     char buf[32];
+    RetStatus retStatus = POK;
     
-    sprintf(buf, "led softVER:202401231423.v01");
+    sprintf(buf, "%s.%s.%s.%s", CBOARD, CWARE, CDATETIME, CVERSION);
 
     for (i = 0; ((i < strlen(buf)) && (i < MTABSIZE(buf))); i++) {
         u8Data.u8Val = buf[i];
-        // u8FIFOin_irq(&g_uart1TxQue, &u8Data);
-        rs485_stor_irq(&u8Data);
+        retStatus = rs485_stor_irq(&u8Data);
+        if (retStatus != POK) {
+            return retStatus;
+        }
     }
+    return retStatus;
 }
 
-/**********************************************************************************************/
-#if 0
-int doNothing(unsigned *arg)
-{
-    (void)arg;
-    return 0;
-}
-#endif
 /*******************************************************************************
  * prase json body(JsonParseL0)
  * 

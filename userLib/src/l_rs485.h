@@ -2,8 +2,7 @@
 #define __L_RSA85_H__
 
 void rs485Init(void);
-//void rs485_stor(u8Data_t *u8Data);
-void rs485_stor_irq(u8Data_t *u8Data);
+RetStatus rs485_stor_irq(u8Data_t *u8Data);
 
 void rs485actProcess(void);
 void rs485TransXDoing(void);

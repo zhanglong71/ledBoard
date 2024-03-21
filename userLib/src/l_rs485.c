@@ -8,27 +8,16 @@
 #include "l_u8FIFO.h"
 #include "l_rs485.h"
 /*******************************************************************************/
-//void rs485_stor(u8Data_t *u8Data)
-void rs485_stor_irq(u8Data_t *u8Data)
+RetStatus rs485_stor_irq(u8Data_t *u8Data)
 {
     if (rs485transX.sm_status == SM_RS485_IDLE) { 
         u8FIFOin_irq(rs485transX.pfifo, u8Data);
     } else {
         /** too many or error !!! **/
+        return PERROR;
     }
+    return POK;
 }
-
-#if 0
-void rs485Init(rs485transX_t *q, Timer_t *timer, msgType_t stepMsgType, msgType_t overMsgType)
-{
-	q->pfifo = &g_uart1TxQue;
-    q->ptimer = &(g_ustimer[0]);
-    q->sm_status = SM_RS485_IDLE;
-    q->stepMsgType = C485_TOUT;
-    q->overMsgType = C485_OVER;
-    ClrTimer_irq(q->ptimer);
-}
-#endif
 
 void rs485Init(void)
 {

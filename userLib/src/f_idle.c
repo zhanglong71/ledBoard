@@ -17,27 +17,6 @@ int f_idle(void *pMsg)
     {
     case CMSG_TMR:
         g_tick++;
-        /********************/
-        GPIO_led2_blink();
-        //u8Data_t u8Data;
-        //u8Data.u8Val = g_tick & 0x7f;
-        //u8FIFOin_irq(&g_uart2TxQue, &u8Data); //????????????????????????????
-        //u8FIFOin_irq(&g_uart1TxQue, &u8Data); //????????????????????????????
-       
-        // vp_stor((g_tick & 0x1f));        //????????????????????????????????
-        
-        //reportVersion();  // ???????????????????????????
-        
-        #if 0
-        if ((g_tick % 3) == 0) {
-            LED_display(0x00ff0000);  // ???????????????????????????
-        } else if ((g_tick % 3) == 1) {
-            LED_display(0x0000ff00);  // ???????????????????????????
-        } else if ((g_tick % 3) == 2) {
-            LED_display(0x000000ff);  // ???????????????????????????
-        }
-        #endif
-        /********************/
         break;
         
     case CMSG_INIT:
@@ -60,6 +39,7 @@ int f_init(void *pMsg)
 {
     func_t func;
     msg_t msg;
+    RetStatus retStatus;
     switch(((msg_t *)pMsg)->msgType) 
     {
     case CMSG_TMR:
@@ -68,35 +48,40 @@ int f_init(void *pMsg)
         
     case CSYS_INIT:        // step1
         SetTimer_irq(&g_timer[0], TIMER_1SEC, CSYS_INITS1);
-	    break;
+        break;
  
     case CSYS_INITS1:      // step2
-        reportVersion();
         LED_display(CINIT_COLOR);
-        //vp_stor(vopIdx_STOP);
-        //promptInit();
-        //vp_stop();
+
         vp_setDefaultVolume();
         vp_stor(vopIdx_standard);
-        SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
-	    break;
-        
+        SetTimer_irq(&g_timer[0], TIMER_1SEC, CSYS_INITS2);
+        break;
+    case CSYS_INITS2:      // step3
+        retStatus = reportVersion();
+        if (retStatus != POK) {  // busy! try again later; giveup the 
+            SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS2);
+        } else {    
+            SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
+        }
+        break;
+
     case CPMT_OVER:       // over
         GPIO_VOPPWR_off();
         fstack_init(&g_fstack);
         func.func = f_idle;
         fstack_push(&g_fstack, &func);
 
-        msgq_init(&g_msgq);
-        msg.msgType = CSYS_INIT;
+        //msgq_init(&g_msgq);
+        msg.msgType = CMSG_INIT;
         msgq_in_irq(&g_msgq, &msg);
         g_tick = 0;
         SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
         break;
         
     default:
-		break;
-	}  
+        break;
+    }  
 
     return  0;
 }

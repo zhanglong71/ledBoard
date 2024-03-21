@@ -2,8 +2,7 @@
 #define __L_JSONTL_H__
 
 char JsonParseL0(char* jsonstrbuf, kv_t* jsonstcarr);
-void reportVersion(void);
-
+RetStatus reportVersion(void);
 /***********************************************/
 void generateLedDispAckOk(char* to);
 void generateLedDispAckErr(char* to);

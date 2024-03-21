@@ -12,9 +12,10 @@ typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 /*******************************************************************************/
+
 typedef enum {
-    FAILED = 0, 
-    PASSED = !FAILED
+    PERROR = -1,
+    POK = 0,
 } RetStatus;
 
 typedef	int	 (*pfunc_t)(void* arg);
