@@ -299,6 +299,21 @@ u8 getColorDepth(void)
     }
     return led_depth_tab[color_depth_index];
 }
+
+u8 getBlinkOnOff(void)
+{
+    u8 const led_onOff_tab[] = {
+        250,
+        0,
+    };
+    u8 static color_onOff_index = 0;
+    color_onOff_index++;
+    if (color_onOff_index >= MTABSIZE(led_onOff_tab)) {
+        color_onOff_index = 0;
+    }
+    return led_onOff_tab[color_onOff_index];
+}
+
 /*************************************************************************/
 void ledRGBinit(void)
 {
@@ -321,7 +336,11 @@ void ledRGBProcess(void)
     u32 color = 0;
 
     ClrTimer_irq(g_led_display.ptimer);
-    depth = getColorDepth();
+    if (g_led_display.tick < 15) { /** > 15, then breath turn to blink **/
+        depth = getColorDepth();
+    } else {
+        depth = getBlinkOnOff();
+    }
     if(g_led_display.color & 0x00ff0000) {
         color |= (depth << 16);
     }
@@ -342,7 +361,7 @@ void ledRGBbreath_start(u32 _color, u16 _tick)
     if (_tick < TIMER_30MS) {
         g_led_display.tick = TIMER_30MS;
     } else {
-        g_led_display.tick = _tick;   // set mask
+        g_led_display.tick = _tick;   // set period
     }
     
     g_led_display.color = 0;   // set mask

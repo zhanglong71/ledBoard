@@ -54,15 +54,15 @@ int sysProcess(void *pMsg)
                      Mset_bit(color_flag, 1);
                      src_idx = i;
                  }
-                 if (strstr(KVarr[i].key, "R")) {
+                 if (strstr(KVarr[i].key, "R") && strstr("R", KVarr[i].key)) {
                      Mset_bit(color_flag, 2);
                      red = atoi(KVarr[i].value);
                  }
-                 if (strstr(KVarr[i].key, "G")) {
+                 if (strstr(KVarr[i].key, "G") && strstr("G", KVarr[i].key)) {
                      Mset_bit(color_flag, 3);
                      green = atoi(KVarr[i].value);
                  }
-                 if (strstr(KVarr[i].key, "B")) {
+                 if (strstr(KVarr[i].key, "B") && strstr("B", KVarr[i].key)) {
                      Mset_bit(color_flag, 4);
                      blue = atoi(KVarr[i].value);
                  }
@@ -78,8 +78,8 @@ int sysProcess(void *pMsg)
                     if (tim == 0) {
                         ledRGBbreath_stop();
                         LED_display(color);
-                    } else  {
-                        ledRGBbreath_start(color, tim);
+                    } else {
+                        ledRGBbreath_start(color, tim);  /** breath or blink **/
                     }
                     generateLedDispAckOk(KVarr[src_idx].key);
                 } else {
