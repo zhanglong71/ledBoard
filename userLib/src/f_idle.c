@@ -9,6 +9,9 @@
 #include "l_actionFIFO.h"
 #include "l_sysProcess.h"
 #include "l_jsonTL.h"
+#include "l_uart.h"
+#include "l_timer.h"
+#include "l_rs485.h"
 #include "f_idle.h"
 
 int f_idle(void *pMsg)
@@ -47,6 +50,41 @@ int f_init(void *pMsg)
         break;
         
     case CSYS_INIT:        // step1
+        /* Configure clock GPIO, UARTs */
+        RCC_Configuration4uart();
+    
+        /* Configure GPIO Pin Tx/Rx for Uart communication */
+        GPIO_Configuration4uart();
+    
+        /* Configure NVIC */
+        NVIC_Configuration4uart();
+    
+        UART1_Configuration();
+        UART2_Configuration();
+        // SysTick_Config(SystemCoreClock / 1000);        // 1ms
+        SysTick_Config(SystemCoreClock / 100);       // 10ms
+        TIM_Config();
+        GPIO_init4led();
+        GPIO_initVOPPort();
+        GPIO_init485();
+        vp_init();
+        /*********************************/
+        promptInit();
+        rs485Init();
+        ledRGBinit();
+        
+        for(int i = 0; i < MTABSIZE(g_ustimer); i++) {
+            ClrTimer(&g_ustimer[i]);
+        }
+        for(int i = 0; i < MTABSIZE(g_timer); i++) {
+            ClrTimer(&g_timer[i]);
+        }
+    
+        u8FIFOinit(&g_uart1TxQue);
+        u8FIFOinit(&g_uart1RxQue);
+        u8FIFOinit(&g_uart2TxQue);
+        u8FIFOinit(&g_uart2RxQue);
+ 
         SetTimer_irq(&g_timer[0], TIMER_1SEC, CSYS_INITS1);
         break;
  

@@ -7,6 +7,11 @@
  *
  *******************************************************************************/
  #include <const.h>
+ 
+#ifndef NULL
+#define NULL ((void *)0)
+#endif
+
  //#include <stdint.h>
 typedef unsigned char u8;
 typedef unsigned short u16;

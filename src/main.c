@@ -93,52 +93,10 @@ LedDisp_t g_led_display;
   */
 int main(void)
 {
-    /*!< At this stage the microcontroller clock setting is already configured,
-       this is done through SystemInit() function which is called from startup
-       file (KEIL_startup_hk32f0301mxxc.s) before to branch to application main.
-       To reconfigure the default setting of SystemInit() function, refer to
-       system_hk32f0301mxxc.c file
-     */
-    /* Configure clock GPIO, UARTs */
-    RCC_Configuration4uart();
-
-    /* Configure GPIO Pin Tx/Rx for Uart communication */
-    GPIO_Configuration4uart();
-
-    /* Configure NVIC */
-    NVIC_Configuration4uart();
-
-    UART1_Configuration();
-    UART2_Configuration();
-    // SysTick_Config(SystemCoreClock / 1000);        // 1ms
-    SysTick_Config(SystemCoreClock / 100);       // 10ms
-    TIM_Config();
-    GPIO_init4led();
-    GPIO_initVOPPort();
-    GPIO_init485();
-    vp_init();
-    /*********************************/
-    promptInit();
-    rs485Init();
-    ledRGBinit();
-    
     fstack_init(&g_fstack);
     func.func = f_init;
     fstack_push(&g_fstack, &func);
-    
-    for(int i = 0; i < MTABSIZE(g_ustimer); i++) {
-        ClrTimer(&g_ustimer[i]);
-    }
-    for(int i = 0; i < MTABSIZE(g_timer); i++) {
-        ClrTimer(&g_timer[i]);
-    }
-    SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
-
-    u8FIFOinit(&g_uart1TxQue);
-    u8FIFOinit(&g_uart1RxQue);
-    u8FIFOinit(&g_uart2TxQue);
-    u8FIFOinit(&g_uart2RxQue);
-  
+     
     msgq_init(&g_msgq);
     msg.msgType = CSYS_INIT;
     msgq_in_irq(&g_msgq, &msg);
@@ -163,7 +121,7 @@ int main(void)
             fstack_init(&g_fstack);
             func.func = f_idle;
             fstack_push(&g_fstack, &func);
-	
+
             g_tick = 0;
             SetTimer_irq(&g_timer[0], TIMER_1SEC, CMSG_TMR);
             continue;

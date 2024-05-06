@@ -34,6 +34,9 @@ void rs485TransXDoing(void)
     switch(rs485transX.sm_status)
     {
     case SM_RS485_IDLE:
+        if ((rs485transX.pfifo == NULL) || (rs485transX.ptimer == NULL)) {
+            return;
+        }
         if(u8FIFOisEmpty(rs485transX.pfifo) != TRUE) {
             rs485transX.sm_status = SM_RS485_START;
             //M485TR_T("∑¢ÀÕ«∞÷√∏ﬂ");
