@@ -85,12 +85,11 @@ int f_init(void *pMsg)
         u8FIFOinit(&g_uart2TxQue);
         u8FIFOinit(&g_uart2RxQue);
  
+        LED_display(CINIT_COLOR);
         SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS1);
         break;
  
     case CSYS_INITS1:      // step2
-        LED_display(CINIT_COLOR);
-
         vp_setDefaultVolume();
         vp_stor(vopIdx_standard);
         SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS2);
