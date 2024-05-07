@@ -85,7 +85,7 @@ int f_init(void *pMsg)
         u8FIFOinit(&g_uart2TxQue);
         u8FIFOinit(&g_uart2RxQue);
  
-        SetTimer_irq(&g_timer[0], TIMER_1SEC, CSYS_INITS1);
+        SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS1);
         break;
  
     case CSYS_INITS1:      // step2
@@ -93,7 +93,7 @@ int f_init(void *pMsg)
 
         vp_setDefaultVolume();
         vp_stor(vopIdx_standard);
-        SetTimer_irq(&g_timer[0], TIMER_1SEC, CSYS_INITS2);
+        SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS2);
         break;
     case CSYS_INITS2:      // step3
         retStatus = reportVersion();
