@@ -80,7 +80,8 @@
 #define	CMAX1_COUPLE		6    // the max number of kv couple in one object between master and slave (uart1 communicate)
 
 /*******************************************************************************/
-#define CINIT_COLOR (0x00fa00fa)  // the power on color(G0,R250,B250)
+// #define CINIT_COLOR (0x00fa00fa)  // the power on color(G250,R0,B250)
+#define CINIT_COLOR (0x00fa0000)  // the power on color(G250,R0,B0)
 
 /*******************************************************************************/
 #endif
