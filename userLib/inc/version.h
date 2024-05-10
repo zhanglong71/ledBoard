@@ -3,7 +3,7 @@
 
 #define CBOARD "led"
 #define CWARE "soft"
-#define CDATETIME "202405071634"
+#define CDATETIME "202405101535"
 #define CVERSION "v001"
 
 #endif

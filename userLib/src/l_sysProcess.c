@@ -46,9 +46,9 @@ int sysProcess(void *pMsg)
             u8 red = 0;
             u8 green = 0;
             u8 blue = 0;
-            u8 tim = 0;
             u8 color_flag = 0;
             u8 src_idx = 0xff;
+            u16 tim = 0;
             for (u8 i = 0; ((i < MTABSIZE(KVarr)) && (KVarr[i].KVIndex > 0)); i++) {
                  if (strstr(KVarr[i].value, "led")) {
                      Mset_bit(color_flag, 1);
