@@ -124,6 +124,13 @@ typedef struct {
     void *var2;
 }pair_t;
 
+typedef struct {
+	u8 red;
+    u8 green;
+    u8 blue;
+    u8 __pad;
+}color_t;
+
 #if 0
 typedef struct {
 	u8 smStatus_curr;

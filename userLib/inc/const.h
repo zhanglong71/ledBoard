@@ -41,6 +41,7 @@
 #define TIMER_50MS	(TIMER_10MS * 5)
 #define TIMER_70MS	(TIMER_10MS * 7)
 #define TIMER_100MS (TIMER_10MS * 10)
+#define TIMER_SELFCLEAN (TIMER_10MS * 10)  /** specified period for self-cleaning **/
 
 #define TIMER_200MS (TIMER_10MS * 20)
 #define TIMER_800MS (TIMER_10MS * 80)
@@ -56,6 +57,8 @@
 #define TIMER_100US	  (TIMER_50US * 2)
 #define TIMER_1000US   (TIMER_50US * 20)
 #define TIMER_5000US   (TIMER_50US * 50)
+/*******************************************************************************/
+#define CTIMFUNC_SELFCLEAN (65520)   // for self-cleaning
 
 /*******************************************************************************/
 #define CCR4_Val (40961)
