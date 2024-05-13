@@ -6,7 +6,7 @@ void GPIO_init485(void);
 
 void GPIO_VOPPWR_off(void);
 void GPIO_VOPPWR_on(void);
-
+void watchDog_init(void);
 
 void GPIO_init4led(void);
 void GPIO_led_blink(void);

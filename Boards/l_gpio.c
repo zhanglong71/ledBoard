@@ -58,6 +58,32 @@ void GPIO_VOPPWR_off(void)
     //GPIO_SetBits(GPIOD, GPIO_Pin_3);   // ???????????????????????
 }
 
+void watchDog_init(void)
+{
+    /* IWDG timeout equal to 250 ms (the timeout may varies due to LSI frequency
+       dispersion) */
+    /* Enable write access to IWDG_PR and IWDG_RLR registers */
+    IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+    
+    /* IWDG counter clock: LSI/32 */
+    IWDG_SetPrescaler(IWDG_Prescaler_8);
+    
+    /* Set counter reload value to obtain 250ms IWDG TimeOut.
+       Counter Reload Value = 250ms/IWDG counter clock period
+                            = 250ms / (LSI/8)
+                            = 0.25s / (LsiFreq/8)
+                            = LsiFreq/(8 * 4)
+                            = LsiFreq/32
+     */
+    IWDG_SetReload(/*LsiFreq = */ 60000 / 32);
+    
+    /* Reload IWDG counter */
+    IWDG_ReloadCounter();
+    
+    /* Enable IWDG (the LSI oscillator will be enabled by hardware) */
+    IWDG_Enable();
+}
+
 /** for test **/
 void GPIO_init4led(void)
 {

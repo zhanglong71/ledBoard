@@ -104,6 +104,7 @@ int main(void)
     /* Infinite Loop */
     while(1)
     {
+        IWDG_ReloadCounter();  // feed dog(Reload IWDG counter)
         //deamon_uart1_send();
         //deamon_uart2_send();
         actionDoing(&g_promptQueue);

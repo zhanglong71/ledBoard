@@ -68,6 +68,7 @@ int f_init(void *pMsg)
         GPIO_initVOPPort();
         GPIO_init485();
         vp_init();
+        watchDog_init();
         /*********************************/
         promptInit();
         rs485Init();
