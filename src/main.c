@@ -83,8 +83,14 @@ rs485transX_t rs485transX;
 actionQueue_t g_promptQueue;
 u8 g_IT_uart1_tmr = 0; // used uart1 received timeover
 
-LedDisp_t g_led_display;
-    
+LedDisp_t g_led_display;    // for led charging display
+/******************************************************************************/
+ComponentField_t g_componentStatus = {
+    .bat_v                = 0,
+    .charge               = CINDEX_UNCHARGED,
+};
+/******************************************************************************/
+
 #endif 
 /**
   * @brief  Main program.

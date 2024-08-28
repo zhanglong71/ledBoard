@@ -7,6 +7,8 @@
 #include "l_arch.h"
 #include "l_u8FIFO.h"
 #include "l_rs485.h"
+
+#include "string.h"
 /*******************************************************************************/
 RetStatus rs485_stor_irq(u8Data_t *u8Data)
 {
@@ -157,3 +159,17 @@ void rs485actOver(void)
 	}
 }
 
+/*********************************************
+ * {"voi":user,"ask":sta}
+ *********************************************/
+ void generateAskstatus(void)
+ {
+     u8 i = 0;
+     u8Data_t u8Data;
+     char buf[] = "{\"xxx\":user,\"ask\":sta}";
+
+     for (i = 0; ((i < strlen(buf)) && (i < MTABSIZE(buf))); i++) {
+         u8Data.u8Val = buf[i];
+         rs485_stor_irq(&u8Data);
+     }
+ }

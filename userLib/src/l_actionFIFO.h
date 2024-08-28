@@ -14,9 +14,7 @@ void actionDelay(int _delay);
 //static void startAction(actionQueue_t *q, action_t * pAction);
 //static void stopAction(actionQueue_t *q)
 void promptInit(void);
-void vp_next(void);
 void vp_stop1(void);
-void vp_setVolume(u8 __vol);
 void vp_setDefaultVolume(void);
 
 void actionDoing(actionQueue_t * q);

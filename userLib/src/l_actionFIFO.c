@@ -88,16 +88,6 @@ int actionQueueOut(actionQueue_t *q, action_t *action)
 }
 
 /*********************************************************************************/
-void led_breath(unsigned char __vpIdx)
-{
-	action_t action;
-
-    action.actionType = CLED_BREATH;
-    action.actionTime = TIMER_70MS;
-    action.actionPara = __vpIdx;
-    actionQueueIn(&g_promptQueue, &action);
-}
-
 void vp_stor(unsigned char __vpIdx)
 {
 	action_t action;
@@ -116,18 +106,6 @@ void vp_stor(unsigned char __vpIdx)
     actionQueueIn(&g_promptQueue, &action);
 }
 
-#if 1
-void vp_setVolume(u8 __vol)
-{
-	action_t action;
-
-    action.actionType = CACT_VOPON;
-    action.actionTime = TIMER_100MS;
-    action.actionPara = ((__vol & 0x0f) | 0xe0);
-    actionQueueIn(&g_promptQueue, &action);
-}
-#endif
-
 void vp_setDefaultVolume(void)
 {
 	action_t action;
@@ -140,7 +118,6 @@ void vp_setDefaultVolume(void)
     action.actionTime = TIMER_100MS;
     action.actionPara = 0xe3;
     actionQueueIn(&g_promptQueue, &action);
-
 }
 
 /**
@@ -215,15 +192,6 @@ void promptInit(void)
 {
 	actionQueueInit(&g_promptQueue, &(g_timer[2]), CPMT_TOUT, CPMT_OVER);
 	stopAction(&g_promptQueue);
-}
-
-void vp_next(void)
-{
-#if 0
-    msg_t msg;
-    msg.msgType = g_promptQueue.stepMsgType;
-    msgq_in_irq(&g_msgq, &msg);
-#endif
 }
 
 /**

@@ -16,10 +16,24 @@
 
 int f_idle(void *pMsg)
 {
+#define CREPORT_PERIOD (30)
+
     switch(((msg_t *)pMsg)->msgType) 
     {
     case CMSG_TMR:
         g_tick++;
+
+        g_led_display.level = batteryVoltage2percent();  /** note: g_led_display.level update by master STOP CHARGING CMD either **/
+        if (g_led_display.level < 1) {
+            if (g_componentStatus.charge == CINDEX_UNCHARGED) {
+                generateAskstatus();
+                charging_animation_blink();
+            }
+        } else {
+            if (g_componentStatus.charge != CINDEX_CHARGING) {
+                dispBatteryLevel(g_led_display.level);
+            }
+        }
         break;
         
     case CMSG_INIT:
@@ -71,7 +85,7 @@ int f_init(void *pMsg)
         /*********************************/
         promptInit();
         rs485Init();
-        ledRGBinit();
+        ledChargeinit();
         
         for(int i = 0; i < MTABSIZE(g_ustimer); i++) {
             ClrTimer(&g_ustimer[i]);
@@ -85,7 +99,7 @@ int f_init(void *pMsg)
         u8FIFOinit(&g_uart2TxQue);
         u8FIFOinit(&g_uart2RxQue);
  
-        LED_display(CINIT_COLOR);
+        // LED_display(CINIT_COLOR);
         SetTimer_irq(&g_timer[0], TIMER_100MS, CSYS_INITS1);
         break;
  

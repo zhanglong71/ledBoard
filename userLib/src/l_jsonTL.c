@@ -110,3 +110,163 @@ void generateLedDispAckErr(char* to)
     }
 }
 
+/**********************************************************************************************/
+void rgb2ActAllLedOff(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDALLOFF;
+    msgq_in_irq(&g_msgq, &msg);
+}
+
+void rgb2ActLedFault(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDFAULT;
+    msgq_in_irq(&g_msgq, &msg);
+}
+
+void rgb2ActLedStandard(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDSTANDARD;
+    msgq_in_irq(&g_msgq, &msg);
+}
+
+void rgb2ActLedHighPower(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDHIGHPOWER;
+    msgq_in_irq(&g_msgq, &msg);
+}
+
+void rgb2ActLedCharging(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGEING;
+    msgq_in_irq(&g_msgq, &msg);
+    
+    g_componentStatus.charge = CINDEX_CHARGING;
+}
+
+void rgb2ActLedClean(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCLEAN;
+    msgq_in_irq(&g_msgq, &msg);
+}
+
+void rgb2ActLedChargeStop(void)
+{
+    msg_t msg;
+    msg.msgType = CMSG_LEDCHARGESTOP;
+    msgq_in_irq(&g_msgq, &msg);
+
+    g_componentStatus.charge = CINDEX_UNCHARGED;
+}
+
+Quintuple_u8u8u8u8u8ptr_t rgbtim2ActArr[] = {
+ /** red,  green, blue, time **/
+    {0,   0,     0,    0,  rgb2ActAllLedOff},         // all Led off
+    {200, 0,     0,    50, rgb2ActLedFault},          // fault
+    {0,   200,   0,    0,  rgb2ActLedStandard},       // standard, charge complete
+    {0,   100,   0,    0,  rgb2ActLedHighPower},      // high power
+    {0,   200,   0,    5,  rgb2ActLedCharging},       // charging
+    {200, 0,     200,  5,  rgb2ActLedClean},          // clean
+    {0,   101,   0,    1,  rgb2ActLedChargeStop},     // charge stop(display volate level)
+};
+
+void ledRGB2msg(Quadruple_u8u8u8u8_t *color)
+{
+    int idx;
+    for (idx = 0; idx < MTABSIZE(rgbtim2ActArr); idx++) {
+        if ((rgbtim2ActArr[idx].red == color->red) &&
+            (rgbtim2ActArr[idx].green == color->green) &&
+            (rgbtim2ActArr[idx].blue == color->blue) &&
+            (rgbtim2ActArr[idx].tim == color->tim)) {
+            rgbtim2ActArr[idx].paction();
+            return;
+        }
+    }
+
+    for (idx = 0; idx < MTABSIZE(rgbtim2ActArr); idx++) {
+        if (rgbtim2ActArr[idx].tim == color->tim) {
+            if (color->tim == 1) {  // 特殊处理
+                rgbtim2ActArr[idx].paction();;
+                g_led_display.level = color->green;  // !!!!!!!!!!!!!!
+                return;
+            }
+        }
+    }
+    
+    return;
+}
+
+#if 0
+Quintuple_u8u8u8u8Msg_t rgbtim2msgArr[] = {
+/** red,  green, blue, time **/
+    {0,   0,     0,    0,  CMSG_LEDALLOFF},     // all Led off
+    {200, 0,     0,    50, CMSG_LEDFAULT},      // fault
+    {0,   200,   0,    0,  CMSG_LEDSTANDARD},   // standard, charge complete
+    {0,   100,   0,    0,  CMSG_LEDHIGHPOWER},  // high power
+    {0,   200,   0,    5,  CMSG_LEDCHARGEING},  // charging
+    {200, 0,     200,  5,  CMSG_LEDCLEAN},      // clean
+    {0,   0,     0,    1,  CMSG_LEDCHARGESTOP}, // charge stop(display volate level)
+};
+
+RetStatus ledRGBtim2msg(Quadruple_u8u8u8u8_t *color, msg_t* msg)
+{
+    int idx;
+    for (idx = 0; idx < MTABSIZE(rgbtim2msgArr); idx++) {
+        if ((rgbtim2msgArr[idx].red == color->red) &&
+            (rgbtim2msgArr[idx].green == color->green) &&
+            (rgbtim2msgArr[idx].blue == color->blue) &&
+            (rgbtim2msgArr[idx].tim == color->tim)) {
+            msg->msgType = rgbtim2msgArr[idx].msg;
+            return POK;
+        }
+    }
+
+    for (idx = 0; idx < MTABSIZE(rgbtim2msgArr); idx++) {
+        if (rgbtim2msgArr[idx].tim == color->tim) {
+            if (color->tim == 1) {  // 特殊处理
+                msg->msgType = rgbtim2msgArr[idx].msg;
+                g_led_display.level = color->green;
+                return POK;
+            }
+        }
+    }
+    
+    return PERROR;
+}
+#endif
+
+u8 batteryVoltage2percent(void)
+{
+#define CVOLTAGE_MAX (1580)
+#define CVOLTAGE_MIN (1300)
+    
+#define CVOLTAGE_0 (CVOLTAGE_MIN)
+#define CVOLTAGE_1 (1350)
+#define CVOLTAGE_2 (1500)
+#define CVOLTAGE_3 (CVOLTAGE_MAX)
+
+    u16 voltage = g_componentStatus.bat_v;
+    
+    if (voltage >= CVOLTAGE_3) {
+        return 3;
+    } else if (voltage >= CVOLTAGE_2) {
+        return 2;
+    } else if (voltage >= CVOLTAGE_1) {
+        return 1;
+    } else {
+        return 0;
+    }
+
+#undef CVOLTAGE_MAX
+#undef CVOLTAGE_MIN
+#undef CVOLTAGE_0
+#undef CVOLTAGE_1
+#undef CVOLTAGE_2
+#undef CVOLTAGE_3
+}
+

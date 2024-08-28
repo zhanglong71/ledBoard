@@ -50,17 +50,17 @@ typedef enum {
     CSYS_INITS3,  	//
     
     CMSG_INIT,  	//初始化动作(进入选择)
-    CGETDEVINFO_REQ,
-    CRESP_INFO,
-    CGETDEVINFO_RSPOK,
-    CGETDEVINFO_RSPERROR,
-    CREPORT_RSPOK,
-    CREPORT_RSPERROR,
-    CGET_CHAR,
-    CPUT_CHAR,
-    CHEART_BEAT,
-    CWIFI_STATUS,
-    CWIFI_TEST,
+    // CGETDEVINFO_REQ,
+    // CRESP_INFO,
+    // CGETDEVINFO_RSPOK,
+    // CGETDEVINFO_RSPERROR,
+    // CREPORT_RSPOK,
+    // CREPORT_RSPERROR,
+    // CGET_CHAR,
+    // CPUT_CHAR,
+    // CHEART_BEAT,
+    // CWIFI_STATUS,
+    // CWIFI_TEST,
     
     CMSG_TMR,
     //CMSG_USTMR,
@@ -92,6 +92,13 @@ typedef enum {
     CLED_STEP,      /** LED display **/
     CLED_OVER,      /** LED display **/
 
+    CMSG_LEDALLOFF,     /** all led off **/
+    CMSG_LEDFAULT,      /** fault director**/
+    CMSG_LEDSTANDARD,   /** standard mode director**/
+    CMSG_LEDHIGHPOWER,  /** highpower mode director**/
+    CMSG_LEDCLEAN,      /** clean mode director**/
+    CMSG_LEDCHARGEING,     /** clean mode director**/
+    CMSG_LEDCHARGESTOP,     /** clean mode director**/
 } msgType_t;
 
 typedef struct msg_s {
@@ -179,8 +186,9 @@ typedef struct {
     Timer_t* ptimer;
     msgType_t stepMsgType;
     msgType_t overMsgType;
-    u32 color;
+
     u16 tick;
+    u8 level;
 } LedDisp_t;
 
 #if 1
@@ -241,7 +249,28 @@ typedef struct actionQueue_s {
 } actionQueue_t;
 #endif
 /*******************************************************************************/
+typedef struct {
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 tim;
+} Quadruple_u8u8u8u8_t;
 
+typedef struct {
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 tim;
+    msgType_t msg;
+} Quintuple_u8u8u8u8Msg_t;
+
+typedef struct {
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 tim;
+    paction_t_0 paction;
+} Quintuple_u8u8u8u8u8ptr_t;
 /*******************************************************************************/
 
 /*******************************************************************************/
@@ -337,7 +366,11 @@ typedef enum {
     SM_RS485_OVER = 3,
     SM_RS485_ERROR = 0xF1,
 } rs485sm_t;
-
+/*******************************************************************************/
+typedef struct ComponentField_s {
+     u16 bat_v;    // the battery voltage(x100)
+     u8 charge;   // Is charging or not
+} ComponentField_t;
 
 /*******************************************************************************/
 #endif /** ifndef end **/

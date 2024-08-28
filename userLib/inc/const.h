@@ -44,6 +44,7 @@
 #define TIMER_SELFCLEAN (TIMER_10MS * 10)  /** specified period for self-cleaning **/
 
 #define TIMER_200MS (TIMER_10MS * 20)
+#define TIMER_600MS (TIMER_10MS * 60)
 #define TIMER_800MS (TIMER_10MS * 80)
 #define TIMER_1SEC  (TIMER_10MS * 100)
 
@@ -60,6 +61,12 @@
 /*******************************************************************************/
 #define CTIMFUNC_SELFCLEAN (65520)   // for self-cleaning
 
+/*******************************************************************************/
+#define CINDEX_UNCHARGED              (16)
+#define CINDEX_CHARGING               (17)
+#define CINDEX_CHARGECOMPLETE         (18)
+#define CINDEX_CHARGEFAULT            (19)
+#define CINDEX_CHARGEREPAIR           (20)
 /*******************************************************************************/
 #define CCR4_Val (40961)
 #define CCR3_Val (27309)

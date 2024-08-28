@@ -86,7 +86,7 @@ void RCC_Configuration4uart(void)
   RCC_APBPeriph2ClockCmd(RCC_APBPeriph2_UART1, ENABLE);
 
   /* Enable UART2 clock */
-  RCC_APBPeriph1ClockCmd(RCC_APBPeriph1_UART2, ENABLE);
+  // RCC_APBPeriph1ClockCmd(RCC_APBPeriph1_UART2, ENABLE);
 }
 
 /**
@@ -124,6 +124,7 @@ void GPIO_Configuration4uart(void)
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   /* UART2 Pins configuration ************************************************/
+  #if 0
   /* Connect pin to Periph */
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource3, GPIO_AF_6);
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_6);
@@ -139,6 +140,7 @@ void GPIO_Configuration4uart(void)
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;   /* RX Pull-Up can filter noise*/
   GPIO_Init(GPIOC, &GPIO_InitStructure);
+  #endif
 }
 
 void UART1_Configuration(void)
@@ -175,7 +177,7 @@ void UART1_Configuration(void)
 
 void UART2_Configuration(void)
 {
-	
+	#if 0
   /* UART2 configuration --------------------------------------------------*/
   /*configured as follow:
   - BaudRate = 9600 baud
@@ -203,6 +205,7 @@ void UART2_Configuration(void)
 
   /* Enable the UART2 */
   UART_Cmd(UART2, ENABLE);
+  #endif
 }
 /**
   * @brief  Configures the nested vectored interrupt controller.
@@ -219,10 +222,12 @@ void NVIC_Configuration4uart(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
+#if 0
   /* UART2 IRQ Channel configuration */
   NVIC_InitStructure.NVIC_IRQChannel = UART2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPriority = 0x01;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
+  #endif
 }
 

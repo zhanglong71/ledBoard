@@ -9,15 +9,24 @@ void GPIO_VOPPWR_on(void);
 
 
 void GPIO_init4led(void);
-void GPIO_led_blink(void);
-void GPIO_led1_blink(void);
-void GPIO_led2_blink(void);
-void LED_display(u32 __color);
+void charging_animation_blink(void);
+void charging_animation_step2(void);
+void dispBatteryLevel(u8 level);
+void led9_12_bias_blink(void);
 
-u8 getColorDepth(void);
-void ledRGBinit(void);
-void ledRGBProcess(void);
-void ledRGBbreath_start(u32 _color, u16 _tick);
-void ledRGBbreath_stop(void);
+void standardMode(void);
+void highpowerMode(void);
+void faultMode(void);
+void cleanMode(void);
+void led9_12_bias_on(void);
+void led9_12_bias_off(void);
+void ledAlloff(void);
+
+// void LED_display(u32 __color);
+
+void ledChargeinit(void);
+void ledChargeProcess(void);
+void ledChargeStart(u16 _tick);
+void ledChargeStop(void);
 
 #endif

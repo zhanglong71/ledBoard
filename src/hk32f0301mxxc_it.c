@@ -219,7 +219,7 @@ void TIM2_IRQHandler(void)
     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
 
     /*vop control frequency = 4k Hz */
-    vop_sendByPulse();
+    // vop_sendByPulse();
     
     capture = TIM_GetCapture1(TIM2);
     TIM_SetCompare1(TIM2, capture + CCR1_Val);

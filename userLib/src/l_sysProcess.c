@@ -14,12 +14,12 @@
 #include "l_sysProcess.h"
 #include "hk32f0301mxxc.h"
 
+char buf[U8FIFOSIZE];
+kv_t KVarr[6];
 int sysProcess(void *pMsg)
 {
     int iRet = TRUE;
-    char buf[U8FIFOSIZE];
     u8Data_t u8Data;
-    kv_t KVarr[6];
     u8 i = 0;
     switch(((msg_t *)pMsg)->msgType)
     {
@@ -70,24 +70,29 @@ int sysProcess(void *pMsg)
                      Mset_bit(color_flag, 5);
                      tim = atoi(KVarr[i].value);
                  }
+
+                 if ((strstr(KVarr[i].key, "bv") && strstr("bv", KVarr[i].key)) ||
+                     (strstr(KVarr[i].key, "bat_v") && strstr("bat_v", KVarr[i].key))) {  // !!!!!! The data takes effect immediately !!!!!!
+                     Mset_bit(color_flag, 6);
+                     g_componentStatus.bat_v = atoi(KVarr[i].value);
+                 }
             }
             if (Mget_bit(color_flag, 1) && Mget_bit(color_flag, 2) && Mget_bit(color_flag, 3) && Mget_bit(color_flag, 4)) {
                 if ((red <= 250) && (green <= 250) && (blue <= 250)) {
-                    /** construct ack**/
-                    u32 color = ((green << 16) | (red << 8) | blue);
-                    if (tim == 0) {
-                        ledRGBbreath_stop();
-                        LED_display(color);
-                    } else {
-                        ledRGBbreath_start(color, tim);  /** breath or blink **/
-                    }
+                    #if 1
+                    Quadruple_u8u8u8u8_t light;
+                    light.red = red;
+                    light.green = green;
+                    light.blue = blue;
+                    light.tim = tim;
+                    ledRGB2msg(&light);
+                    
+                    #endif
                     generateLedDispAckOk(KVarr[src_idx].key);
                 } else {
                     generateLedDispAckErr(KVarr[src_idx].key);
                 }
-            } 
-            else
-            {
+            } else {
                 /*** nothing ***/
             }
         };
@@ -100,15 +105,37 @@ int sysProcess(void *pMsg)
     case C485_TOUT:
         rs485actProcess();
         break;
-    
+
     case C485_OVER:    
         rs485actOver();
         break;
-        
+
     case CLED_STEP:
-        ledRGBProcess();
+        ledChargeProcess();
         break;
-                          
+
+    case CMSG_LEDALLOFF:     /** all led off **/
+        ledAlloff();
+        break;
+    case CMSG_LEDFAULT:      /** fault director**/
+        faultMode();
+        break;
+    case CMSG_LEDSTANDARD:   /** standard mode director**/
+        standardMode();
+        break;
+    case CMSG_LEDHIGHPOWER:  /** highpower mode director**/
+        highpowerMode();
+        break;
+    case CMSG_LEDCLEAN:      /** clean mode director**/
+        cleanMode();
+        break;
+    case CMSG_LEDCHARGEING:     /** clean mode director**/
+        ledChargeStart(TIMER_600MS);
+        break;
+    case CMSG_LEDCHARGESTOP:
+        ledChargeStop();
+        break;
+
     default:
         iRet = FALSE;
         break;	

@@ -6,6 +6,9 @@ RetStatus reportVersion(void);
 /***********************************************/
 void generateLedDispAckOk(char* to);
 void generateLedDispAckErr(char* to);
+void ledRGB2msg(Quadruple_u8u8u8u8_t *color);
+
+u8 batteryVoltage2percent(void);
 
 /***********************************************/
 

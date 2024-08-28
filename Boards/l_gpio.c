@@ -8,6 +8,7 @@
 
 void GPIO_initVOPPort(void)
 {
+#if 0
   GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIOD Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
@@ -27,6 +28,7 @@ void GPIO_initVOPPort(void)
 
   GPIO_SetBits(GPIOD, GPIO_Pin_2);
   GPIO_ResetBits(GPIOD, GPIO_Pin_3);
+#endif
 }
 
 void GPIO_init485(void)
@@ -35,7 +37,7 @@ void GPIO_init485(void)
   /* GPIOD Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
 
-  /* Configure PD02() in output pushpull mode */
+  /* Configure PB04() in output pushpull mode */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -49,72 +51,244 @@ void GPIO_init485(void)
 
 void GPIO_VOPPWR_on(void)
 {
-    GPIO_SetBits(GPIOD, GPIO_Pin_3);
+    //GPIO_SetBits(GPIOD, GPIO_Pin_3);
 }
 
 void GPIO_VOPPWR_off(void)
 {
-    GPIO_ResetBits(GPIOD, GPIO_Pin_3);
-    //GPIO_SetBits(GPIOD, GPIO_Pin_3);   // ???????????????????????
+    //GPIO_ResetBits(GPIOD, GPIO_Pin_3);
 }
 
-/** for test **/
+/** initial all led **/
 void GPIO_init4led(void)
 {
   GPIO_InitTypeDef        GPIO_InitStructure;
   /* GPIOD Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOD, ENABLE);
 
-  /* Configure PD01 in output pushpull mode */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+  /* Configure (led1) in output pushpull mode */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;    // GPIO_PuPd_DOOWN
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
   GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-  //GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-  //GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-  /** led2 **/
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
- 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;  /** RGB_display **/
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-}
-
-void GPIO_led1_blink(void)
-{
-    GPIO_Toggle(GPIOD, GPIO_Pin_1);
-}
-
-void GPIO_led2_blink(void)
-{
-    GPIO_Toggle(GPIOC, GPIO_Pin_7);
-}
-
-void GPIO_led_blink(void)
-{
-#if 0
-    if(GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_7) == Bit_RESET) { \
-        GPIO_WriteBit(GPIOC, GPIO_Pin_7, Bit_SET);    \
-    } else {                                          \
-        GPIO_WriteBit(GPIOC, GPIO_Pin_7, Bit_RESET);  \
-    }
-    
-    if(GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_1) == Bit_RESET) { \
-        GPIO_WriteBit(GPIOD, GPIO_Pin_1, Bit_SET);    \
-    } else {                                          \
-        GPIO_WriteBit(GPIOD, GPIO_Pin_1, Bit_RESET);  \
-    }
-#else
-    GPIO_Toggle(GPIOD, GPIO_Pin_1);
-    GPIO_Toggle(GPIOC, GPIO_Pin_7);
-#endif
+/** initial display **/
+  MFAULTLED2_OFF("turn off fault led");
+  MSTANDARDLED3_OFF("turn off standard led");
+  MHIGHPOWERLED4_OFF("turn off highpower led");
+  MCLEANLED5_OFF("turn off clean led");
+  /** battery level **/
+  MCHARGELED6_ON("turn on charge led");
+  MCHARGELED7_OFF("turn off charge led");
+  MCHARGELED8_OFF("turn off charge led");
+  /** bias light**/
+  MBIASLED_ON("turn on bias led");
 }
 
 /*************************************************************************/
+void led2fault_off(void)
+{
+    MFAULTLED2_OFF("turn off fault led");
+}
+void led2fault_on(void)
+{
+    MFAULTLED2_ON("turn on fault led");
+}
+
+void led3standard_off(void)
+{
+    MSTANDARDLED3_OFF("turn off standard led");
+}
+void led3standard_on(void)
+{
+    MSTANDARDLED3_ON("turn on standard led");
+}
+
+void led4highpower_off(void)
+{
+    MHIGHPOWERLED4_OFF("turn off highpower led");
+}
+void led4highpower_on(void)
+{
+    MHIGHPOWERLED4_ON("turn on highpower led");
+}
+
+void led5clean_off(void)
+{
+    MCLEANLED5_OFF("turn off clean led");
+}
+void led5clean_on(void)
+{
+    MCLEANLED5_ON("turn on clean led");
+}
+
+/*************************************************************************/
+void standardMode(void)
+{
+    MFAULTLED2_OFF("turn off fault led");
+    MSTANDARDLED3_ON("turn on standard led");
+    MHIGHPOWERLED4_OFF("turn off highpower led");
+    MCLEANLED5_OFF("turn off clean led");
+}
+void highpowerMode(void)
+{
+    MFAULTLED2_OFF("turn off fault led");
+    MSTANDARDLED3_OFF("turn off standard led");
+    MHIGHPOWERLED4_ON("turn on highpower led");
+    MCLEANLED5_OFF("turn off clean led");
+}
+
+void faultMode(void)
+{
+    MFAULTLED2_ON("turn on fault led");
+    MSTANDARDLED3_OFF("turn off standard led");
+    MHIGHPOWERLED4_OFF("turn off highpower led");
+    MCLEANLED5_OFF("turn off clean led");
+}
+
+void cleanMode(void)
+{
+    MFAULTLED2_OFF("turn off fault led");
+    MSTANDARDLED3_OFF("turn off standard led");
+    MHIGHPOWERLED4_OFF("turn off highpower led");
+    MCLEANLED5_ON("turn on clean led");
+}
+
+void ledAlloff(void)
+{
+    MFAULTLED2_OFF("turn off fault led");
+    MSTANDARDLED3_OFF("turn off standard led");
+    MHIGHPOWERLED4_OFF("turn off highpower led");
+    MCLEANLED5_OFF("turn off clean led");
+
+    MCHARGELED6_OFF("turn off charge led");
+    MCHARGELED7_OFF("turn off charge led");
+    MCHARGELED8_OFF("turn off charge led");
+
+    MBIASLED_OFF("turn off bias led");
+}
+/*************************************************************************/
+#if 0
+void led6charge_off(void)
+{
+    MCHARGELED6_OFF("turn off charge led");
+}
+void led6charge_on(void)
+{
+    MCHARGELED6_ON("turn on charge led");
+}
+
+void led7charge_off(void)
+{
+    MCHARGELED7_OFF("turn off charge led");
+}
+void led7charge_on(void)
+{
+    MCHARGELED7_ON("turn on charge led");
+}
+
+void led8fcharge_off(void)
+{
+    MCHARGELED8_OFF("turn off charge led");
+}
+void led8charge_on(void)
+{
+    MCHARGELED8_ON("turn on charge led");
+}
+#endif
+void charging_3_0(void)
+{
+    MCHARGELED6_OFF("turn off charge led");
+    MCHARGELED7_OFF("turn off charge led");
+    MCHARGELED8_OFF("turn off charge led");
+}
+void charging_3_1(void)
+{
+    MCHARGELED6_ON("turn on charge led");
+    MCHARGELED7_OFF("turn off charge led");
+    MCHARGELED8_OFF("turn off charge led");
+}
+void charging_3_2(void)
+{
+    MCHARGELED6_ON("turn on charge led");
+    MCHARGELED7_ON("turn on charge led");
+    MCHARGELED8_OFF("turn off charge led");
+}
+void charging_3_3(void)
+{
+    MCHARGELED6_ON("turn on charge led");
+    MCHARGELED7_ON("turn on charge led");
+    MCHARGELED8_ON("turn on charge led");
+}
+
+/*************************************************************************/
+void led9_12_bias_off(void)
+{
+    MBIASLED_OFF("turn off bias led");
+}
+void led9_12_bias_on(void)
+{
+    MBIASLED_ON("turn on bias led");
+}
+
+paction_t_0 baisBlinkArr[] = {
+    led9_12_bias_off,
+    led9_12_bias_on,
+};
+
+void led9_12_bias_blink(void)
+{
+    int static step = 0;
+    step++;
+    step &= 0x1;
+    baisBlinkArr[step]();
+}
+
+/*************************************************************************/
+paction_t_0 chargingArr_step1[] = {
+    charging_3_0,
+    charging_3_3,
+};
+
+void charging_animation_blink(void)
+{
+    int static step = 0;
+    step++;
+    step &= 0x1;
+    chargingArr_step1[step]();
+}
+
+paction_t_0 chargingArr_step2[] = {
+    charging_3_0,
+    charging_3_1,
+    charging_3_2,
+    charging_3_3,
+};
+
+void charging_animation_step2(void)
+{
+    int static step = 0;
+    step++;
+    step &= 0x3;
+    chargingArr_step2[step]();
+}
+
+void dispBatteryLevel(u8 _level)
+{
+     if (_level > 3) {
+        _level = 3;
+     }
+     chargingArr_step2[_level]();
+}
+
+/*************************************************************************/
+
+/*************************************************************************/
+#if 0
 static void GPIO_bit0(void)
 {
     GPIOC->BSRR = GPIO_Pin_5; /** GPIO_SetBits(GPIOC, GPIO_Pin_5); **/
@@ -182,7 +356,9 @@ void LED_display(u32 __color)
    
    IRQ_enable();
 }
+#endif
 
+#if 0
 /*************************************************************************
  * color value
  *************************************************************************/
@@ -299,7 +475,9 @@ u8 getColorDepth(void)
     }
     return led_depth_tab[color_depth_index];
 }
+#endif
 
+#if 0
 u8 getBlinkOnOff(void)
 {
     u8 const led_onOff_tab[] = {
@@ -313,90 +491,16 @@ u8 getBlinkOnOff(void)
     }
     return led_onOff_tab[color_onOff_index];
 }
-
-const color_t led_color_tab[] = {
-    {250,0,0},   // red ==> green
-    {235,15,0},
-    {220,30,0},
-    {205,45,0},
-    {190,60,0},
-    {175,75,0},
-    {160,90,0},
-    {145,105,0},
-    {130,120,0},
-    {115,135,0},
-    {100,150,0},
-    {85,165,0},
-    {70,180,0},
-    {55,195,0},
-    {40,210,0},
-    {25,225,0},
-    {10,240,0},
-    {0,250,0},
-
-    // {0,250,0},   // green ==> blue
-    {0,235,15},
-    {0,220,30},
-    {0,205,45},
-    {0,190,60},
-    {0,175,75},
-    {0,160,90},
-    {0,145,105},
-    {0,130,120},
-    {0,115,135},
-    {0,100,150},
-    {0,85,165},
-    {0,70,180},
-    {0,55,195},
-    {0,40,210},
-    {0,25,225},
-    {0,10,240},
-    {0,0,250},
-
-    
-   // {0,0,250},  // blue ==> red
-    {15,0,235},
-    {30,0,220},
-    {45,0,205},
-    {60,0,190},
-    {75,0,175},
-    {90,0,160},
-    {105,0,145},
-    {120,0,130},
-    {135,0,105},
-    {150,0,100},
-    {165,0,85},
-    {180,0,70},
-    {195,0,55},
-    {210,0,40},
-    {225,0,25},
-    {240,0,10},
-   // {250,0,0},
-};
-
-u32 getColor(void)
-{
-    u8 static color_index = 0;
-    u32 color = 0;
-    color_index++;
-    if (color_index >= MTABSIZE(led_color_tab)) {
-        color_index = 0;
-    }
-    color =  (led_color_tab[color_index].blue);
-    color |= (led_color_tab[color_index].red << 8);
-    color |= (led_color_tab[color_index].green << 16);
-    return color;
-}
+#endif
 
 /*************************************************************************/
-void ledRGBinit(void)
+void ledChargeinit(void)
 {
 #if 1
-    g_led_display.color = 0;
+    g_led_display.level = 1;
     g_led_display.tick = 0;
 
     g_led_display.ptimer = &(g_timer[3]);
-    //g_led_display.sm_status = CLEDDISP_NONE;
     g_led_display.stepMsgType = CLED_STEP;
     g_led_display.overMsgType = CLED_OVER;
 
@@ -404,65 +508,29 @@ void ledRGBinit(void)
 #endif
 }
 
-void ledRGBProcess(void)
+void ledChargeProcess(void)
 {
-    u8 depth = 0;
-    u32 color = 0;
-
     ClrTimer_irq(g_led_display.ptimer);
-    if (g_led_display.tick < 15) { /** < 15, then breath **/
-        depth = getColorDepth();
-    } else if (g_led_display.tick < CTIMFUNC_SELFCLEAN) {  /** 65530 > tick > 15, then breath turn to blink **/
-        depth = getBlinkOnOff();
-    } else {    /** CTIMFUNC_SELFCLEAN specify display **/
-        color = getColor();         // ??????????
-        // color = getBlinkOnOff();    // ????????????
-        LED_display(color);
-        SetTimer_irq(g_led_display.ptimer, TIMER_SELFCLEAN, g_led_display.stepMsgType);
-        return;
-    }
-    if(g_led_display.color & 0x00ff0000) {
-        color |= (depth << 16);
-    }
-    if(g_led_display.color & 0x0000ff00) {
-        color |= (depth << 8);
-    }
-    if(g_led_display.color & 0x000000ff) {
-        color |= (depth);
-    }
-    
-    LED_display(color);
+    charging_animation_step2();
+
     SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
 }
 
-void ledRGBbreath_start(u32 _color, u16 _tick)
+void ledChargeStart(u16 _tick)
 {
     ClrTimer_irq(g_led_display.ptimer);
-    if (_tick < TIMER_30MS) {
-        g_led_display.tick = TIMER_30MS;
+    if (_tick < TIMER_200MS) {
+        g_led_display.tick = TIMER_200MS;
     } else {
         g_led_display.tick = _tick;   // set period
     }
-    
-    g_led_display.color = 0;   // set mask
-    if(_color & 0x00ff0000) {  // green
-        g_led_display.color |= 0x00ff0000;
-    }
-    if(_color & 0x0000ff00) {  // red
-        g_led_display.color |= 0x0000ff00;
-    }
-    if(_color & 0x000000ff) {  // blue
-        g_led_display.color |= 0x000000ff;
-    }
-
-    // LED_display(g_led_display.color & 0x00010101);
-    // SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
-    SetTimer_irq(g_led_display.ptimer, TIMER_20MS, g_led_display.stepMsgType);
+    charging_3_3();
+    SetTimer_irq(g_led_display.ptimer, g_led_display.tick, g_led_display.stepMsgType);
 }
 
-void ledRGBbreath_stop(void)
+void ledChargeStop(void)
 {
-    g_led_display.color = 0;   // mask
+    // g_led_display.color = 0;   // mask
     g_led_display.tick = 0;
     ClrTimer_irq(g_led_display.ptimer);
 }

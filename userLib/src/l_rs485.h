@@ -9,6 +9,6 @@ void rs485TransXDoing(void);
 void rs485actOver(void);
 
 smStatus_t rs485NextStep(smStatus_t cur_status);
-
+void generateAskstatus(void);
 
 #endif

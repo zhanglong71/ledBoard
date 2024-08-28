@@ -20,6 +20,7 @@ extern u16 g_tick;
 extern	u16 g_flag;
 
 extern actionQueue_t g_promptQueue;
+extern ComponentField_t g_componentStatus;
 
 extern u8 g_IT_uart1_tmr;
 
