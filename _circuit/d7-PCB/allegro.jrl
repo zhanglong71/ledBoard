@@ -1,0 +1,52 @@
+\t (00:00:11) allegro 16.6-2015 S115 (v16-6-112JF) Windows 32
+\t (00:00:11)     Journal start - Wed Aug 21 09:04:45 2024
+\t (00:00:11)         Host=BF-202401031141 User=Administrator Pid=10400 CPUs=6
+\t (00:00:11) CmdLine= D:\Cadence\SPB_16.6\tools\pcb\bin\allegro.exe D:\WORK\code\1221∆’  ∞Ê\led∞Â\ledBoard\_circuit\d7-PCB\d7-water-2024030401.brd
+\t (00:00:11) 
+\t (00:00:12) Opening existing design...
+\d (00:00:12) Design opened: D:/WORK/code/1221∆’  ∞Ê/led∞Â/ledBoard/_circuit/d7-PCB/d7-water-2024030401.brd
+\i (00:00:13) trapsize 1170
+\i (00:00:13) trapsize 1149
+\i (00:00:13) trapsize 1174
+\i (00:00:13) trapsize 1184
+\i (00:00:13) trapsize 1398
+\i (00:00:13) trapsize 1398
+\i (00:00:14) generaledit 
+\i (00:00:19) zoom out 1 
+\i (00:00:19) setwindow pcb
+\i (00:00:19) zoom out 1871.67 -235.20
+\i (00:00:19) trapsize 2796
+\i (00:00:23) zoom out 1 
+\i (00:00:23) setwindow pcb
+\i (00:00:23) zoom out -2517.35 -587.43
+\i (00:00:23) trapsize 5591
+\i (00:00:24) zoom in 1 
+\i (00:00:24) setwindow pcb
+\i (00:00:24) zoom in 4851.73 -128.96
+\i (00:00:24) trapsize 2796
+\i (00:00:25) zoom in 1 
+\i (00:00:25) setwindow pcb
+\i (00:00:25) zoom in 4851.73 -128.95
+\i (00:00:25) trapsize 1398
+\i (00:00:29) setwindow form.vf_vis
+\i (00:00:29) FORM vf_vis 1 all_colorvisible YES 
+\i (00:00:35) FORM vf_vis all_all_visible YES 
+\i (00:00:35) FORM vf_vis all_all_visible NO 
+\i (00:00:37) FORM vf_vis all_all_visible YES 
+\i (00:00:42) FORM vf_vis 3 all_colorvisible NO 
+\i (00:00:46) FORM vf_vis 2 all_colorvisible NO 
+\i (00:00:50) setwindow pcb
+\i (00:00:50) zoom in 1 
+\i (00:00:50) setwindow pcb
+\i (00:00:50) zoom in 3890.06 -5.94
+\i (00:00:50) trapsize 699
+\i (00:02:20) setwindow form.vf_vis
+\i (00:02:20) FORM vf_vis 2 all_colorvisible YES 
+\i (00:02:21) FORM vf_vis 1 all_colorvisible NO 
+\i (00:02:33) FORM vf_vis 1 all_colorvisible YES 
+\i (00:02:34) FORM vf_vis 2 all_colorvisible NO 
+\i (00:02:56) FORM vf_vis 2 all_colorvisible YES 
+\i (00:02:58) FORM vf_vis 2 all_colorvisible NO 
+\i (26:08:23) setwindow pcb
+\i (26:08:23) exit 
+\t (26:08:24)     Journal end - Thu Aug 22 11:12:58 2024
